@@ -1,0 +1,158 @@
+<!-- leave-application.component.html -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Leave Portal</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <!-- <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                </li> -->
+            </ul>
+            <form class="d-flex">
+                <button class="btn btn-success" type="submit">Download</button>
+                <button class="ms-2 btn btn-danger" type="submit">Report</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card mt-5 mb-5">
+                <div class="card-body">
+                    <h2 class="card-title display-6 text-center mb-4">Leave Apply</h2>
+                    <form #userForm="ngForm" (ngSubmit)="onClick(userForm)">
+                        <div class="row">
+                            <div class="col mb-3">
+                                <input type="text" id="fname" name="fname" class="form-control" ngModel
+                                    placeholder="First Name" #fname="ngModel" minlength="5" required>
+                                    <div *ngIf="fname.touched && fname.invalid" class="text-danger">
+                                        <span class="mt-1" *ngIf="fname.errors?.['required']">First name is required</span>
+                                        <span class="mt-1" *ngIf="fname.errors?.['minlength']">Name must be 5 characters</span>
+                                    </div>
+                            </div>
+                            <div class="col mb-3">
+                                <input type="text" id="lname" name="lname" class="form-control" ngModel
+                                    placeholder="Last Name" #lname="ngModel" required>
+                                    <div *ngIf="lname.touched && lname.invalid" class="text-danger">
+                                        <span class="mt-1" *ngIf="lname.errors?.['required']">Last name is required</span>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="email" id="email" name="email" class="form-control" ngModel placeholder="Email"
+                                 required email #email="ngModel">
+                                <div *ngIf="email.touched && email.invalid" class="text-danger">
+                                    <span class="mt-1" *ngIf="email.errors?.['required']">Email is required</span>
+                                    <span class="mt-1" *ngIf="email.errors?.['email']">Enter a vaild email</span>
+                                </div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="email" id="dellemail" name="dellemail" class="form-control" ngModel placeholder="Dell Email"
+                                 required email #dellemail="ngModel">
+                                <div *ngIf="dellemail.touched && dellemail.invalid" class="text-danger">
+                                    <span class="mt-1" *ngIf="dellemail.errors?.['required']">Email is required</span>
+                                    <span class="mt-1" *ngIf="dellemail.errors?.['email']">Enter a vaild email</span>
+                                </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="email" id="deloitteemail" name="deloitteemail" class="form-control" ngModel placeholder="Deloitte Email"
+                                 required email #deloitteemail="ngModel">
+                                 <div *ngIf="deloitteemail.touched && deloitteemail.invalid" class="text-danger">
+                                    <span class="mt-1" *ngIf="deloitteemail.errors?.['required']">Email is required</span>
+                                    <span class="mt-1" *ngIf="deloitteemail.errors?.['email']">Enter a vaild email</span>
+                                    <span class="mt-1" *ngIf="!deloitteemail.errors?.['required'] && !deloitteemail.errors?.['email']">Email must be from deloitte.com</span>
+                                </div>
+                        </div>
+                        
+
+                        <div class="mb-3">
+                            <select #leave="ngModel" name="leave" ngModel class="form-control" [(ngModel)]="model.leave" required>
+                              <option value="" selected>Leave type</option>
+                              <option value="Sick">Sick</option>
+                              <option value="Casual">Casual</option>
+                              <option value="PTO">PTO</option>
+                              <option value="Privileged">Privileged</option>
+                            </select>
+                            <div *ngIf="leave.touched && leave.invalid" class="text-danger">
+                                <span *ngIf="leave.errors?.['required']">Leave type</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="row">
+                            <div class="col ms-1 mt-2">
+                                <label class="form-label">Start Date</label>
+                            </div>
+                            <div class="col">
+                            <input type="date" id="startdate" name="startdate" class="form-control" ngModel placeholder="Start Date"
+                                 required #startdate="ngModel">
+                                <div *ngIf="startdate.touched && startdate.invalid" class="text-danger">
+                                    <span class="mt-1" *ngIf="startdate.errors?.['required']">Start Date is required</span>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="row">
+                            <div class="col ms-1 mt-2">
+                                <label class="form-label">End Date</label>
+                            </div>
+                            <div class="col">
+                            <input type="date" id="enddate" name="enddate" class="form-control" ngModel placeholder="Start Date"
+                                 required #enddate="ngModel">
+                                <div *ngIf="enddate.touched && enddate.invalid" class="text-danger">
+                                    <span class="mt-1" *ngIf="enddate.errors?.['required']">End Date is required</span>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="row">
+                            <div class="col ms-1 mt-2">
+                                <label class="form-label">Reason</label>
+                            </div>
+                            <div class="col">
+                                <textarea  class="form-control"></textarea>
+                            </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="d-grid">
+                            <button type="submit" [disabled]="userForm.invalid" class="btn btn-warning">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
