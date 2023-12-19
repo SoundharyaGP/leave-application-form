@@ -2,16 +2,17 @@ export class leave {
     name: string;
     email: string;
     dellemail: string;
-    deloitteemail: string;
+    approveremail: string;
     startDate: string;
     endDate: string;
     reason: string;
     leave: string;
 
-    constructor(name: string,
+    constructor(
+        name: string,
         email: string,
         dellemail: string,
-        deloitteemail: string,
+        approveremail: string,
         startDate: string,
         endDate: string,
         reason: string,
@@ -20,7 +21,7 @@ export class leave {
             this.name = name;
             this.email = email;
             this.dellemail = dellemail;
-            this.deloitteemail = deloitteemail;
+            this.approveremail = approveremail;
             this.startDate = startDate;
             this.endDate = endDate;
             this.reason = reason;

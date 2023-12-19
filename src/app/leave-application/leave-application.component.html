@@ -1,5 +1,3 @@
-<!-- leave-application.component.html -->
-<div></div>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Leave Portal</a>
@@ -9,33 +7,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <!-- <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li> -->
             </ul>
             <form class="d-flex">
-                <button class="btn btn-success" type="submit">Download</button>
-                <button class="ms-2 btn btn-danger" type="submit">Report</button>
+                <button class="btn btn-success" onclick="location.href='http://127.0.0.1:8088/request/downloadExcel'"
+                    type="submit">Download</button>
+                <button class="ms-2 btn btn-danger" type="submit" (click)="openModal()">Report</button>
             </form>
         </div>
     </div>
@@ -46,108 +22,112 @@
         <div class="col-md-4">
             <div class="card mt-5 mb-5">
                 <div class="card-body">
-                    <h2 class="card-title display-6 text-center mb-4">Leave Apply</h2>
+                    <h2 class="card-title display-6 text-center mb-4">Leave Application</h2>
                     <form #userForm="ngForm" (ngSubmit)="onClick(userForm)">
                         <div class="row">
                             <div class="col mb-3">
-                                <input type="text" id="fname" name="fname" class="form-control" ngModel
-                                    placeholder="First Name" #fname="ngModel" minlength="5" required>
-                                    <div *ngIf="fname.touched && fname.invalid" class="text-danger">
-                                        <span class="mt-1" *ngIf="fname.errors?.['required']">First name is required</span>
-                                        <span class="mt-1" *ngIf="fname.errors?.['minlength']">Name must be 5 characters</span>
-                                    </div>
-                            </div>
-                            <div class="col mb-3">
-                                <input type="text" id="lname" name="lname" class="form-control" ngModel
-                                    placeholder="Last Name" #lname="ngModel" required>
-                                    <div *ngIf="lname.touched && lname.invalid" class="text-danger">
-                                        <span class="mt-1" *ngIf="lname.errors?.['required']">Last name is required</span>
-                                    </div>
+                                <input type="text" id="name" name="name" class="form-control" ngModel
+                                    placeholder="First Name" #name="ngModel" value="Sound" minlength="3" required>
+                                <div *ngIf="name.touched && name.invalid" class="text-danger">
+                                    <span class="mt-1" *ngIf="name.errors?.['required']">name is required</span>
+                                    <span class="mt-1" *ngIf="name.errors?.['minlength']">Name must be 5
+                                        characters</span>
+                                </div>
                             </div>
                         </div>
                         <div class="mb-3">
                             <input type="email" id="email" name="email" class="form-control" ngModel placeholder="Email"
-                                 required email #email="ngModel">
-                                <div *ngIf="email.touched && email.invalid" class="text-danger">
-                                    <span class="mt-1" *ngIf="email.errors?.['required']">Email is required</span>
-                                    <span class="mt-1" *ngIf="email.errors?.['email']">Enter a vaild email</span>
-                                </div>
+                                required email #email="ngModel" googleEmailValidator
+                                pattern="^[A-z0-9]+@([Dd]eloitte).[Cc]om$">
+                            <div *ngIf="email.touched && email.invalid" class="text-danger">
+                                <span class="mt-1" *ngIf="email.errors?.['required']">Email is required</span>
+                                <span class="mt-1" *ngIf="email.errors?.['email']">Enter a vaild email </span>
+                                <span class="mt-1" *ngIf="!email.errors?.['required'] && !email.errors?.['email']">Email
+                                    must be from deloitte.com</span>
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <input type="email" id="dellemail" name="dellemail" class="form-control" ngModel placeholder="Dell Email"
-                                 required email #dellemail="ngModel">
-                                <div *ngIf="dellemail.touched && dellemail.invalid" class="text-danger">
-                                    <span class="mt-1" *ngIf="dellemail.errors?.['required']">Email is required</span>
-                                    <span class="mt-1" *ngIf="dellemail.errors?.['email']">Enter a vaild email</span>
-                                </div>
+                            <input type="email" id="dellemail" name="dellemail" class="form-control" ngModel
+                                placeholder="Dell Email" required email #dellemail="ngModel" googleEmailValidator
+                                pattern="^[A-z]+@([Dd]ell).[Cc]om$">
+                            <div *ngIf="dellemail.touched && dellemail.invalid" class="text-danger">
+                                <span class="mt-1" *ngIf="dellemail.errors?.['required']">Email is required</span>
+                                <span class="mt-1" *ngIf="dellemail.errors?.['email']">Enter a vaild email </span>
+                                <span class="mt-1"
+                                    *ngIf="!dellemail.errors?.['required'] && !dellemail.errors?.['email']">Email
+                                    must be from dell.com</span>
+                            </div>
                         </div>
+                        <div class="mb-3">
+                            <input type="email" id="approveremail" name="approveremail" class="form-control" ngModel
+                                placeholder="Deloitte Email" required email #approveremail="ngModel"
+                                googleEmailValidator pattern="^[A-z0-9]+@([Dd]eloitte).[Cc]om$">
 
-                        <div class="mb-3">
-                            <input type="email" id="deloitteemail" name="deloitteemail" class="form-control" ngModel placeholder="Deloitte Email"
-                                 required email #deloitteemail="ngModel">
-                                 <div *ngIf="deloitteemail.touched && deloitteemail.invalid" class="text-danger">
-                                    <span class="mt-1" *ngIf="deloitteemail.errors?.['required']">Email is required</span>
-                                    <span class="mt-1" *ngIf="deloitteemail.errors?.['email']">Enter a vaild email</span>
-                                    <span class="mt-1" *ngIf="!deloitteemail.errors?.['required'] && !deloitteemail.errors?.['email']">Email must be from deloitte.com</span>
-                                </div>
+                            <div *ngIf="approveremail.touched && approveremail.invalid" class="text-danger">
+                                <span class="mt-1" *ngIf="approveremail.errors?.['required']">Email is required</span>
+                                <span class="mt-1" *ngIf="approveremail.errors?.['email']">Enter a vaild email </span>
+                                <span class="mt-1"
+                                    *ngIf="!approveremail.errors?.['required'] && !approveremail.errors?.['email']">Email
+                                    must be from deloitte.com</span>
+                            </div>
                         </div>
-                        
-
                         <div class="mb-3">
-                            <select #leave="ngModel" name="leave" ngModel class="form-control" [(ngModel)]="model.leave" required>
-                              <option value="" selected>Leave type</option>
-                              <option value="Sick">Sick</option>
-                              <option value="Casual">Casual</option>
-                              <option value="PTO">PTO</option>
-                              <option value="Privileged">Privileged</option>
+                            <select id="leave" name="leave" [(ngModel)]="leaveType" class="form-control"
+                                required (blur)="leaveTypeTouched = true">
+                                <option value="" disabled selected>Select Leave type</option>
+                                <option value="Sick">Sick</option>
+                                <option value="Casual">Casual</option>
+                                <option value="PTO">PTO</option>
+                                <option value="Privileged">Privileged</option>
                             </select>
-                            <div *ngIf="leave.touched && leave.invalid" class="text-danger">
-                                <span *ngIf="leave.errors?.['required']">Leave type</span>
+                            <div *ngIf="leaveTypeRequiredError()" class="text-danger">
+                                Leave type is required
                             </div>
                         </div>
-
-                        <div class="mb-3">
-                            <div class="row">
-                            <div class="col ms-1 mt-2">
-                                <label class="form-label">Start Date</label>
-                            </div>
-                            <div class="col">
-                            <input type="date" id="startdate" name="startdate" class="form-control" ngModel placeholder="Start Date"
-                                 required #startdate="ngModel">
-                                <div *ngIf="startdate.touched && startdate.invalid" class="text-danger">
-                                    <span class="mt-1" *ngIf="startdate.errors?.['required']">Start Date is required</span>
+                        <div>
+                            <div class="mb-3">
+                                <div class="row">
+                                    <div class="col ms-1 mt-2">
+                                        <label class="form-label">Start Date</label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="date" id="startDate" name="startDate" class="form-control" ngModel
+                                            placeholder="Start Date" [(ngModel)]="StartDate" required
+                                            #startDate="ngModel">
+                                        <div *ngIf="startDate.touched && startDate.invalid" class="text-danger">
+                                            <span class="mt-1" *ngIf="startDate.errors?.['required']">Start Date is
+                                                required</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="row">
-                            <div class="col ms-1 mt-2">
-                                <label class="form-label">End Date</label>
-                            </div>
-                            <div class="col">
-                            <input type="date" id="enddate" name="enddate" class="form-control" ngModel placeholder="Start Date"
-                                 required #enddate="ngModel">
-                                <div *ngIf="enddate.touched && enddate.invalid" class="text-danger">
-                                    <span class="mt-1" *ngIf="enddate.errors?.['required']">End Date is required</span>
+                            <div class="mb-3">
+                                <div class="row">
+                                    <div class="col ms-1 mt-2">
+                                        <label class="form-label">End Date</label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="date" id="endDate" name="endDate" class="form-control" ngModel
+                                            placeholder="Start Date" required [(ngModel)]="EndDate" #endDate="ngModel">
+                                        <div *ngIf="endDate.touched && endDate.invalid" class="text-danger">
+                                            <span class="mt-1" *ngIf="endDate.errors?.['required']">End Date is
+                                                required</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            </div>
                         </div>
-
                         <div class="mb-3">
                             <div class="row">
-                            <div class="col ms-1 mt-2">
-                                <label class="form-label">Reason</label>
-                            </div>
-                            <div class="col">
-                                <textarea  class="form-control"></textarea>
-                            </div>
+                                <div class="col ms-1 mt-2">
+                                    <label class="form-label">Reason</label>
+                                </div>
+                                <div class="col">
+                                    <textarea id="reason" name="reason" #reason="ngModel"
+                                        ngModel class="form-control"></textarea>
+                                </div>
                             </div>
                         </div>
-
-                        
                         <div class="d-grid">
                             <button type="submit" [disabled]="userForm.invalid" class="btn btn-warning">Submit</button>
                         </div>
@@ -157,3 +137,149 @@
         </div>
     </div>
 </div>
+
+
+<div *ngFor="let year of details" class="container mt-3">
+    <h2>{{ year.key }}</h2>
+  
+    <div *ngFor="let monthDetails of year.value" class="row mt-3">
+      <h3>{{ monthDetails.key }}</h3>
+  
+      <div *ngIf="monthDetails.value && monthDetails.value.length > 0; else noEvents" class="table-responsive">
+        <table class="table table-bordered table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Dell Email</th>
+              <th>Approver Email</th>
+              <th>Leave</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Reason</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let event of monthDetails.value">
+              <td>{{ event?.name }}</td>
+              <td>{{ event?.email }}</td>
+              <td>{{ event?.dellemail }}</td>
+              <td>{{ event?.approveremail }}</td>
+              <td>{{ event?.leave }}</td>
+              <td>{{ event?.startDate | date }}</td>
+              <td>{{ event?.endDate | date }}</td>
+              <td>{{ event?.reason }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <ng-template #noEvents>
+        <p>None</p>
+      </ng-template>
+    </div>
+  </div>
+  
+
+
+
+
+<div *ngIf="showModal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Select Months</h4>
+                <button type="button" class="close btn btn-danger" aria-label="Close" (click)="closeModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-2">
+                    <select id="year" name="year" class="form-control" [(ngModel)]="selectedYear">
+                        <option value="" disabled selected>Year</option>
+                        <option value="2000">2000</option>
+                        <option value="2001">2001</option>
+                        <option value="2002">2002</option>
+                        <option value="2003">2003</option>
+                        <option value="2000">2004</option>
+                        <option value="2001">2005</option>
+                        <option value="2002">2006</option>
+                        <option value="2003">2007</option>
+                        <option value="2000">2008</option>
+                        <option value="2001">2009</option>
+                        <option value="2002">2010</option>
+                        <option value="2003">2011</option>
+                        <option value="2000">2012</option>
+                        <option value="2001">2013</option>
+                        <option value="2002">2014</option>
+                        <option value="2003">2015</option>
+                        <option value="2000">2016</option>
+                        <option value="2001">2017</option>
+                        <option value="2002">2018</option>
+                        <option value="2003">2019</option>
+                        <option value="2000">2020</option>
+                        <option value="2001">2021</option>
+                        <option value="2002">2022</option>
+                        <option value="2023">2023</option>
+                        <option value="2000">2024</option>
+                        <option value="2001">2025</option>
+                        <option value="2002">2026</option>
+                        <option value="2003">2027</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="col-3" *ngFor="let month of months">
+                        <input type="checkbox" id="{{ month }}" [(ngModel)]="selectedMonths[month]"
+                            class="hidden-checkbox visually-hidden" />
+                        <label for="{{ month }}" [class.btn-success]="selectedMonths[month]"
+                            class="btn btn-secondary btn-block mb-2 w-100 d-flex align-items-center">
+                            <span class="mx-auto">{{ month }}</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="onSubmit()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- <div *ngFor="let yearDetails of details">
+    <h2>{{ yearDetails[0] }}</h2>
+    <ng-container *ngFor="let monthDetails of yearDetails[1] | keyvalue">
+      <h3>{{ monthDetails.key }}</h3>
+      <ng-container *ngIf="monthDetails.value && monthDetails.value.length > 0; else noEvents">
+        <div *ngFor="let event of monthDetails.value">
+          <strong>Name:</strong> {{ event?.name }}<br>
+          <strong>Email:</strong> {{ event?.email }}<br>
+          <strong>Dellemail:</strong> {{ event?.dellemail }}<br>
+          <strong>Approveremail:</strong> {{ event?.approveremail }}<br>
+          <strong>Leave:</strong> {{ event?.leave }}<br>
+          <strong>Start Date:</strong> {{ event?.startDate | date }}<br>
+          <strong>End Date:</strong> {{ event?.endDate | date }}<br>
+          <strong>Reason:</strong> {{ event?.reason }}<br>
+        </div>
+      </ng-container>
+      <ng-template #noEvents>
+        <p>No events</p>
+      </ng-template>
+    </ng-container>
+  </div> -->
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

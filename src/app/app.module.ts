@@ -4,18 +4,33 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LeaveApplicationComponent } from './leave-application/leave-application.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReportModalComponent } from './report-modal/report-modal.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+// import {ModalComponent} from './modal/modal.component';
+import {MatDialogModule, MatDialog} from '@angular/material/dialog';
+import { MatTableModule } from '@angular/material/table';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    LeaveApplicationComponent
+    LeaveApplicationComponent,
+    ReportModalComponent,
+    
+    // ModalComponent,
+    // ExistingComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule,
+    NgbModule,
+    MatDialogModule,
+    MatTableModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,61 +1,120 @@
 import { Component } from '@angular/core';
-import {NgForm,FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { LeaveService } from '../leave.service';
 import { leave } from '../leave';
+import { MatDialog } from '@angular/material/dialog';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 
 
 @Component({
   selector: 'app-leave-application',
   templateUrl: './leave-application.component.html',
-  styleUrls: ['./leave-application.component.css']
+  styleUrls: ['./leave-application.component.css'],
+  providers: [MatDialog]
 })
 export class LeaveApplicationComponent {
+
+  showModal = false;
+  leaveType: string = '';
+  leaveTypeTouched: boolean = false;
+  StartDate: string = '';
+  EndDate: string = '';
+  filteredData: any[] = [];
+  defaultYear: string = 'Year';
+  details: { key: string; value: { key: string; value: any }[] }[] = [];
+
   
-  constructor(private _leaveServ:LeaveService) {
+  selectedYear: string = '';
+  selectedMonths: {[key: string]: boolean} = {};
+  months: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; 
+  
+  constructor(private _leaveServ: LeaveService, public dialog: MatDialog, private modalService: NgbModal) {
+
   }
-  
-  // name: string = '';
-  // email: string = '';
-  // dellemail: string = '';
-  // deloitteemail: string = '';
-  // leaveType: string = '';
-  // startDate: string = '';
-  // endDate: string = '';
-  // reason: string = '';
 
-  // // Method to handle form submission
-  // submitForm() {
-  //   // Handle form submission logic here (e.g., send data to the backend)
-  //   console.log('Form submitted:', this.name, this.email, this.dellemail, this.deloitteemail, this.leaveType, this.startDate, this.endDate, this.reason); 
-  // }
+  ngOnInit(): void {
+    console.log('Details:', this.details);
+  }
 
-  l:leave = new leave('','','','','','','','');
+  openModal() {
+    console.log('Modal opened');
+    this.showModal = true;
+  }
 
-  post(post:any){
-    this._leaveServ.postLeave(this.l).subscribe(data=>{
+  closeModal() {
+    this.showModal = false;
+  }
+
+
+  post(leaveData: leave) {
+    this._leaveServ.postLeave(leaveData).subscribe(data => {
       console.log(data);
-    })
+    });
   }
 
-  onClick(userForm:NgForm){
-    this.post(userForm)
-    console.log(userForm.value);
+  onClick(userForm: NgForm) {
+    if (this.isEndDateBeforeStartDate()) {
+      alert('End date must be greater than start date');
+    }
+    else {
+      const formData = userForm.value;
+      const leaveData: leave = {
+        name: formData.name,
+        email: formData.email,
+        dellemail: formData.dellemail,
+        approveremail: formData.approveremail,
+        leave: formData.leave,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+        reason: formData.reason
+      };
+      this.post(leaveData);
+      console.log(formData);
+      userForm.resetForm();
+    }
   }
 
+  leaveTypeRequiredError(): boolean {
+    return this.leaveTypeTouched && !this.leaveType;
+  }
+
+  isEndDateBeforeStartDate(): boolean {
+    return !!(this.StartDate && this.EndDate && new Date(this.EndDate) < new Date(this.StartDate));
+  }
+
+  get(): void {
+    const formattedMonths = Object.keys(this.selectedMonths).filter(month => this.selectedMonths[month]);
+    const expectedInput = [[this.selectedYear, formattedMonths]];
   
-  model: any={
-    leave: ''
-  };
+    console.log('Expected Input:', expectedInput);
+  
+    this._leaveServ.fetchData(expectedInput).subscribe(
+      (result: any) => {
+        console.log("Result", result);
+  
+        // Assuming result has the expected structure
+        this.details = Object.entries(result).map(([key, value]) => ({
+          key,
+          value: (value as any).map((innerValue: any) => ({
+            key: Object.keys(innerValue)[0], // Assuming there's only one key in innerValue
+            value: innerValue[Object.keys(innerValue)[0]]
+          }))
+        }));
+      },
+      (error: any) => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+  
 
-  // exportToExcel() {
-  //   const dataToExport = [
-  //     ['Name', 'Email', 'Dell Email', 'Approver Email', 'Leave Type', 'Start Date', 'End Date', 'Reason'],
-  //     [this.name, this.email, this.dellEmail, this.deloitteemail, this.leaveType, this.startDate, this.endDate, this.reason],
-  //   ];
+  onSubmit() {
+    console.log('Selected Year:', this.selectedYear);
+    console.log('Selected Months:', this.selectedMonths);
 
-  //   const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(dataToExport);
-  //   const wb: XLSX.WorkBook = XLSX.utils.book_new();
-  //   XLSX.utils.book_append_sheet(wb, ws, 'LeaveApplicationData');
-  //   XLSX.writeFile(wb, 'leave_application_data.xlsx');
-  // }
+    this.get();
+    this.closeModal();
+  }
+
 }
