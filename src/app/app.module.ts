@@ -5,9 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LeaveApplicationComponent } from './leave-application/leave-application.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ReportModalComponent } from './report-modal/report-modal.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-// import {ModalComponent} from './modal/modal.component';
 import {MatDialogModule, MatDialog} from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 
@@ -16,8 +14,6 @@ import { MatTableModule } from '@angular/material/table';
   declarations: [
     AppComponent,
     LeaveApplicationComponent,
-    ReportModalComponent,
-    
     // ModalComponent,
     // ExistingComponent
   ],

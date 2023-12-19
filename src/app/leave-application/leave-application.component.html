@@ -29,7 +29,7 @@
                                 <input type="text" id="name" name="name" class="form-control" ngModel
                                     placeholder="First Name" #name="ngModel" value="Sound" minlength="3" required>
                                 <div *ngIf="name.touched && name.invalid" class="text-danger">
-                                    <span class="mt-1" *ngIf="name.errors?.['required']">name is required</span>
+                                    <span class="mt-1" *ngIf="name.errors?.['required']">Name is required</span>
                                     <span class="mt-1" *ngIf="name.errors?.['minlength']">Name must be 5
                                         characters</span>
                                 </div>
@@ -51,7 +51,7 @@
                                 placeholder="Dell Email" required email #dellemail="ngModel" googleEmailValidator
                                 pattern="^[A-z]+@([Dd]ell).[Cc]om$">
                             <div *ngIf="dellemail.touched && dellemail.invalid" class="text-danger">
-                                <span class="mt-1" *ngIf="dellemail.errors?.['required']">Email is required</span>
+                                <span class="mt-1" *ngIf="dellemail.errors?.['required']">Dell Email is required</span>
                                 <span class="mt-1" *ngIf="dellemail.errors?.['email']">Enter a vaild email </span>
                                 <span class="mt-1"
                                     *ngIf="!dellemail.errors?.['required'] && !dellemail.errors?.['email']">Email
@@ -64,7 +64,8 @@
                                 googleEmailValidator pattern="^[A-z0-9]+@([Dd]eloitte).[Cc]om$">
 
                             <div *ngIf="approveremail.touched && approveremail.invalid" class="text-danger">
-                                <span class="mt-1" *ngIf="approveremail.errors?.['required']">Email is required</span>
+                                <span class="mt-1" *ngIf="approveremail.errors?.['required']">Deloitte Email is
+                                    required</span>
                                 <span class="mt-1" *ngIf="approveremail.errors?.['email']">Enter a vaild email </span>
                                 <span class="mt-1"
                                     *ngIf="!approveremail.errors?.['required'] && !approveremail.errors?.['email']">Email
@@ -72,8 +73,8 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <select id="leave" name="leave" [(ngModel)]="leaveType" class="form-control"
-                                required (blur)="leaveTypeTouched = true">
+                            <select id="leave" name="leave" [(ngModel)]="leaveType" class="form-control" required
+                                (blur)="leaveTypeTouched = true">
                                 <option value="" disabled selected>Select Leave type</option>
                                 <option value="Sick">Sick</option>
                                 <option value="Casual">Casual</option>
@@ -123,8 +124,8 @@
                                     <label class="form-label">Reason</label>
                                 </div>
                                 <div class="col">
-                                    <textarea id="reason" name="reason" #reason="ngModel"
-                                        ngModel class="form-control"></textarea>
+                                    <textarea id="reason" name="reason" #reason="ngModel" ngModel
+                                        class="form-control"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -141,45 +142,42 @@
 
 <div *ngFor="let year of details" class="container mt-3">
     <h2>{{ year.key }}</h2>
-  
     <div *ngFor="let monthDetails of year.value" class="row mt-3">
-      <h3>{{ monthDetails.key }}</h3>
-  
-      <div *ngIf="monthDetails.value && monthDetails.value.length > 0; else noEvents" class="table-responsive">
-        <table class="table table-bordered table-striped table-hover">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Dell Email</th>
-              <th>Approver Email</th>
-              <th>Leave</th>
-              <th>Start Date</th>
-              <th>End Date</th>
-              <th>Reason</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let event of monthDetails.value">
-              <td>{{ event?.name }}</td>
-              <td>{{ event?.email }}</td>
-              <td>{{ event?.dellemail }}</td>
-              <td>{{ event?.approveremail }}</td>
-              <td>{{ event?.leave }}</td>
-              <td>{{ event?.startDate | date }}</td>
-              <td>{{ event?.endDate | date }}</td>
-              <td>{{ event?.reason }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-  
-      <ng-template #noEvents>
-        <p>None</p>
-      </ng-template>
+        <h3>{{ monthDetails.key }}</h3>
+        <div *ngIf="monthDetails.value && monthDetails.value.length > 0; else noEvents" class="table-responsive">
+            <table class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Dell Email</th>
+                        <th>Approver Email</th>
+                        <th>Leave</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Reason</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let event of monthDetails.value">
+                        <td>{{ event?.name }}</td>
+                        <td>{{ event?.email }}</td>
+                        <td>{{ event?.dellemail }}</td>
+                        <td>{{ event?.approveremail }}</td>
+                        <td>{{ event?.leave }}</td>
+                        <td>{{ event?.startDate | date }}</td>
+                        <td>{{ event?.endDate | date }}</td>
+                        <td>{{ event?.reason }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <ng-template #noEvents>
+            <p>None</p>
+        </ng-template>
     </div>
-  </div>
-  
+</div>
+
 
 
 
@@ -244,42 +242,3 @@
         </div>
     </div>
 </div>
-
-
-
-
-
-<!-- <div *ngFor="let yearDetails of details">
-    <h2>{{ yearDetails[0] }}</h2>
-    <ng-container *ngFor="let monthDetails of yearDetails[1] | keyvalue">
-      <h3>{{ monthDetails.key }}</h3>
-      <ng-container *ngIf="monthDetails.value && monthDetails.value.length > 0; else noEvents">
-        <div *ngFor="let event of monthDetails.value">
-          <strong>Name:</strong> {{ event?.name }}<br>
-          <strong>Email:</strong> {{ event?.email }}<br>
-          <strong>Dellemail:</strong> {{ event?.dellemail }}<br>
-          <strong>Approveremail:</strong> {{ event?.approveremail }}<br>
-          <strong>Leave:</strong> {{ event?.leave }}<br>
-          <strong>Start Date:</strong> {{ event?.startDate | date }}<br>
-          <strong>End Date:</strong> {{ event?.endDate | date }}<br>
-          <strong>Reason:</strong> {{ event?.reason }}<br>
-        </div>
-      </ng-container>
-      <ng-template #noEvents>
-        <p>No events</p>
-      </ng-template>
-    </ng-container>
-  </div> -->
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
