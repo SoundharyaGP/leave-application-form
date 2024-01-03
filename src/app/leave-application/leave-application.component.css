@@ -26,7 +26,11 @@
     margin: -1px; padding: 0; border: 0;
   }
   
-  
+  card-title display-6 text-center mb-4{
+    background-color: #763de1;
+    
+    
+  }
 
 
   /* Add additional styles as needed */

@@ -16,13 +16,6 @@ export class LeaveService {
     return this._http.post<leave>(this._leaveUrl,leave);
   }
 
-  // fetchData(selectedMonths: string[]): Observable<any> {
-  //   const paramString = selectedMonths.join(',');
-  //   const options = {
-  //     params: new HttpParams().set('months', paramString)
-  //   };
-  //   return this._http.get(`${this.apiUrl}/fetch-data`, options);
-  // }
 
   fetchData(obj:any):Observable<leave>{
     return this._http.post<leave>(this.apiUrl,obj);
