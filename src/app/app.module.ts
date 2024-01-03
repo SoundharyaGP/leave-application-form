@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {MatDialogModule, MatDialog} from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
+import jsPDF from 'jspdf';
 
 
 @NgModule({
@@ -25,7 +26,7 @@ import { MatTableModule } from '@angular/material/table';
     ReactiveFormsModule,
     NgbModule,
     MatDialogModule,
-    MatTableModule
+    MatTableModule,
     
   ],
   providers: [],

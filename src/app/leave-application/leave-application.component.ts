@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { LeaveService } from '../leave.service';
 import { leave } from '../leave';
 import { MatDialog } from '@angular/material/dialog';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 
 @Component({
@@ -24,11 +25,11 @@ export class LeaveApplicationComponent {
   defaultYear: string = 'Year';
   details: { key: string; value: { key: string; value: any }[] }[] = [];
 
-  
+  @ViewChild('pdfTable') pdfTable!: ElementRef;
   selectedYear: string = '';
-  selectedMonths: {[key: string]: boolean} = {};
-  months: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; 
-  
+  selectedMonths: { [key: string]: boolean } = {};
+  months: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
   constructor(private _leaveServ: LeaveService, public dialog: MatDialog, private modalService: NgbModal) {
 
   }
@@ -86,18 +87,17 @@ export class LeaveApplicationComponent {
   get(): void {
     const formattedMonths = Object.keys(this.selectedMonths).filter(month => this.selectedMonths[month]);
     const expectedInput = [[this.selectedYear, formattedMonths]];
-  
+
     console.log('Expected Input:', expectedInput);
-  
+
     this._leaveServ.fetchData(expectedInput).subscribe(
       (result: any) => {
         console.log("Result", result);
-  
-        // Assuming result has the expected structure
+
         this.details = Object.entries(result).map(([key, value]) => ({
           key,
           value: (value as any).map((innerValue: any) => ({
-            key: Object.keys(innerValue)[0], // Assuming there's only one key in innerValue
+            key: Object.keys(innerValue)[0],
             value: innerValue[Object.keys(innerValue)[0]]
           }))
         }));
@@ -107,7 +107,7 @@ export class LeaveApplicationComponent {
       }
     );
   }
-  
+
 
   onSubmit() {
     console.log('Selected Year:', this.selectedYear);
@@ -116,5 +116,40 @@ export class LeaveApplicationComponent {
     this.get();
     this.closeModal();
   }
+
+  downloadAsPDF() {
+    const pdf = new jsPDF();
+
+    const autoTableConfig: { head: string[][], body: (string[] | { hline: true })[] } = {
+      head: [['Year', 'Month', 'Name', 'Email', 'Dell Email', 'Approver Email', 'Leave', 'Start Date', 'End Date', 'Reason']],
+      body: [],
+    };
+
+    this.details.forEach(year => {
+      year.value.forEach(monthDetails => {
+        const yearMonthData = [year.key, monthDetails.key];
+        monthDetails.value.forEach((event: any) => {
+          const rowData: (string[] | { hline: true }) = yearMonthData.concat([
+            event?.name,
+            event?.email,
+            event?.dellemail,
+            event?.approveremail,
+            event?.leave,
+            event?.startDate ? new Date(event.startDate).toLocaleDateString() : '',
+            event?.endDate ? new Date(event.endDate).toLocaleDateString() : '',
+            event?.reason,
+          ]);
+          autoTableConfig.body.push(rowData);
+        });
+      });
+    });
+
+    const year = this.selectedYear;
+    const monthName = Object.keys(this.selectedMonths).filter(month => this.selectedMonths[month]);
+    (pdf as any).autoTable(autoTableConfig);
+    const fileName = `${monthName}${year ? `_${year}` : ''}_Leavepdf.pdf`;
+    pdf.save(fileName);
+  }
+
 
 }
